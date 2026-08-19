@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌟 Kids Number Quest - Fun Math Adventure! 🎈</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Background floating decorations -->
+  <div class="bg-shapes" aria-hidden="true">
+    <div class="bubble b1">1</div>
+    <div class="bubble b2">5</div>
+    <div class="bubble b3">7</div>
+    <div class="bubble b4">9</div>
+    <div class="bubble b5">3</div>
+    <div class="bubble b6">2</div>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="app-container">
+    <!-- Top Navigation / Header -->
+    <header class="game-header">
+      <div class="logo-group">
+        <span class="logo-icon bounce">🎈</span>
+        <h1 class="logo-text">Number <span class="highlight">Quest</span></h1>
+      </div>
+
+      <!-- Audio & Accessibility Bar -->
+      <div class="header-controls">
+        <button id="btn-voice" class="icon-btn" title="Read questions aloud" aria-label="Toggle Voice Narrator">
+          <span class="btn-emoji">🗣️</span>
+          <span class="btn-label">Voice ON</span>
+        </button>
+        <button id="btn-sound" class="icon-btn" title="Toggle sound effects" aria-label="Toggle Sound Effects">
+          <span class="btn-emoji" id="sound-icon">🔊</span>
+          <span class="btn-label" id="sound-label">Sound ON</span>
+        </button>
+        <button id="btn-stickers" class="icon-btn sticker-btn" title="View your sticker collection" aria-label="Sticker Book">
+          <span class="btn-emoji">⭐</span>
+          <span class="btn-label">Stickers (<span id="sticker-count">0</span>)</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Player Stats HUD -->
+    <section class="stats-hud" aria-label="Game Status">
+      <div class="hud-card star-card">
+        <span class="hud-icon">⭐</span>
+        <div class="hud-info">
+          <span class="hud-label">Stars</span>
+          <span class="hud-value" id="star-score">0</span>
+        </div>
+      </div>
+
+      <div class="hud-card streak-card">
+        <span class="hud-icon">🔥</span>
+        <div class="hud-info">
+          <span class="hud-label">Streak</span>
+          <span class="hud-value" id="streak-score">0</span>
+        </div>
+      </div>
+
+      <div class="hud-card round-card">
+        <span class="hud-icon">🎯</span>
+        <div class="hud-info">
+          <span class="hud-label">Question</span>
+          <span class="hud-value"><span id="current-q-num">1</span> / <span id="total-q-num">5</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Round Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar" style="width: 20%;"></div>
+    </div>
+
+    <!-- Mode Selector Tabs -->
+    <nav class="mode-tabs" aria-label="Game Modes">
+      <button class="mode-tab active" data-mode="counting">
+        <span class="tab-emoji">🍎</span>
+        <span>Count Items</span>
+      </button>
+      <button class="mode-tab" data-mode="addition">
+        <span class="tab-emoji">➕</span>
+        <span>Add & Subtract</span>
+      </button>
+      <button class="mode-tab" data-mode="compare">
+        <span class="tab-emoji">⚖️</span>
+        <span>Bigger / Smaller</span>
+      </button>
+      <button class="mode-tab" data-mode="pattern">
+        <span class="tab-emoji">🔢</span>
+        <span>Number Patterns</span>
+      </button>
+    </nav>
+
+    <!-- Main Game Play Area -->
+    <main class="game-board">
+      <!-- Mascot Companion -->
+      <div class="mascot-section">
+        <div class="mascot" id="mascot">
+          <div class="mascot-avatar" id="mascot-avatar">⭐</div>
+          <div class="mascot-speech" id="mascot-speech" aria-live="polite">
+            Hi friend! Let's play with numbers! 🚀
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <section class="question-card" id="question-card">
+        <div class="question-header">
+          <h2 class="question-text" id="question-text">How many apples do you see?</h2>
+          <button id="btn-speak-question" class="speech-bubble-btn" title="Listen to question" aria-label="Listen to question">
+            🔊 Listen
+          </button>
+        </div>
+
+        <!-- Visual Items Display (Counting & Visual Math) -->
+        <div class="visual-display" id="visual-display">
+          <!-- Dynamically filled with cute icons/equations -->
+        </div>
+
+        <!-- Multiple Choice Options -->
+        <div class="options-grid" id="options-grid">
+          <!-- Dynamically populated answer bubbles -->
+        </div>
+
+        <!-- Instant Feedback Message -->
+        <div class="feedback-banner" id="feedback-banner" aria-live="assertive"></div>
+      </section>
+    </main>
+
+    <!-- Footer / Instructions -->
+    <footer class="game-footer">
+      <p>💡 Tip: Click the numbers to choose your answer and collect stars for stickers!</p>
+    </footer>
+  </div>
+
+  <!-- Sticker Book Modal -->
+  <div class="modal-overlay" id="sticker-modal" hidden>
+    <div class="modal-content sticker-modal-content">
+      <button class="modal-close" id="btn-close-stickers" aria-label="Close">&times;</button>
+      <h2 class="modal-title">🏆 Your Magical Sticker Book</h2>
+      <p class="modal-subtitle">Earn 3 stars to unlock a new prize sticker!</p>
+      <div class="stickers-grid" id="stickers-grid">
+        <!-- Populated dynamically with stickers -->
+      </div>
+    </div>
+  </div>
+
+  <!-- GRAND CONGRATULATIONS / ROUND COMPLETED MODAL -->
+  <div class="modal-overlay" id="congratulations-modal" hidden>
+    <div class="modal-content victory-modal-content">
+      <div class="confetti-burst-icon">🎉</div>
+      <div class="trophy-badge animate-trophy">🏆</div>
+      <h2 class="victory-title" id="victory-title">CONGRATULATIONS!</h2>
+      <p class="victory-subtitle" id="victory-subtitle">You are a Math Superhero! 🌟</p>
+
+      <div class="victory-stats">
+        <div class="vstat-item">
+          <span class="vstat-emoji">⭐</span>
+          <span class="vstat-val" id="victory-stars">+5 Stars</span>
+          <span class="vstat-lbl">Stars Earned</span>
+        </div>
+        <div class="vstat-item">
+          <span class="vstat-emoji">🔥</span>
+          <span class="vstat-val" id="victory-streak">5 in a row!</span>
+          <span class="vstat-lbl">Best Streak</span>
+        </div>
+        <div class="vstat-item" id="victory-sticker-box">
+          <span class="vstat-emoji" id="victory-sticker-emoji">🦄</span>
+          <span class="vstat-val" id="victory-sticker-name">Unicorn</span>
+          <span class="vstat-lbl">New Sticker!</span>
+        </div>
+      </div>
+
+      <div class="victory-actions">
+        <button id="btn-play-again" class="btn-primary-action pulse">
+          🚀 Play Next Round!
+        </button>
+        <button id="btn-victory-stickers" class="btn-secondary-action">
+          ⭐ View Stickers
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="audio.js"></script>
+  <script src="confetti.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
